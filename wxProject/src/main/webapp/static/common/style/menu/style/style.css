@@ -1,0 +1,114 @@
+@charset "utf-8";
+
+#webmenu {
+	height:30px;
+	background:transparent;
+	text-align:center;
+}
+#webmenu, #webmenu ul {
+	margin:0;
+	padding:0;
+	z-index: 10001;
+	list-style:none;
+}
+#webmenu a {
+	color:#FFF;
+	text-decoration:none;
+	font-size:12px;
+	font-weight: bolder;
+}
+
+#webmenu li ul {
+	display:none;
+}
+#webmenu li ul li {
+	float:none;
+	display:block;
+}
+#webmenu li ul a {
+	float:none;
+	height:28px;
+	line-height:28px;
+	padding:0 10px;
+	text-transform:capitalize;
+}
+.second-menu, .third-menu, .fourth-menu {
+	position:absolute;
+}
+.first-menu li {
+	float:left;
+	position:relative;
+}
+.first-menu a {
+	float:left;
+	display:block;
+	padding:0 20px;
+	height:28px;
+	line-height:28px;
+	background:#44C4C2;
+	border-top:1px solid transparent;
+	border-left:1px solid transparent;
+	border-bottom:1px solid transparent;
+	border-right:1px solid transparent;	
+}
+.first-menu li:hover {
+/* 	background:#5db1e0;  */
+	
+	background:rgba(0,0,0,0.4);
+	/*border-top:1px solid #5db1e0;
+	border-left:1px solid #5db1e0;*/
+}
+.first-menu > li > a {
+	float:left;
+	display:block;
+	padding:0 20px;
+	height:28px;
+	line-height:28px;
+	background:transparent;
+	border-top:1px solid transparent;
+	border-left:1px solid transparent;
+	border-bottom:1px solid transparent;
+	border-right:1px solid transparent;
+}
+/*.first-menu > li > a:hover {
+	background:#44C4C2;
+	border-top:1px solid transparent;
+	border-left:1px solid transparent;
+}*/
+.second-menu {
+	top:28px;
+	right:-30px;
+	width:150px;
+	background: #5db1e0;
+/* 	background:white; */
+}
+.second-menu a.arrow {
+	background:#44C4C2 url('../images/arrow.png') no-repeat center right;
+}
+.second-menu a.arrow:hover {
+	background:#5db1e0 url('../images/arrow.png') no-repeat center right;
+}
+.third-menu, .fourth-menu {
+	top:0;
+	left:150px;
+	width:150px;
+}
+.main-head #webmenu .second-menu a{
+	display:inline-block;
+	width:90%;
+	margin:0 auto;
+    text-align: center;
+    padding: 0;
+    font-size: 15px;
+    height: auto;
+    display: inherit;
+/*     border-top: 1px solid #D1D1D1; */
+    background:none;
+    
+}
+/* .main-head #webmenu .second-menu a:hover{ */
+/* 	background: #2482a7; */
+/* } */
+.second-menu li:hover{
+	background: #2482a7;
+}

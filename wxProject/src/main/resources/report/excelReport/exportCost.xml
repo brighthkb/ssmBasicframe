@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excel id="exportCost" title="内控表_">
+	<sheet title="清单定额">
+		<column title="项     目" fieldName="materialname" width="40" align="center" />
+		<column title="施工图预算（元）" fieldName="constructionsum" width="30" align="center" />
+		<column title="施工预算（元）" fieldName="projectsum" width="30" align="center" />
+		<column title="成本降低额（元）" fieldName="difference" width="30" align="center" />
+		<column title="备注" fieldName="remark" width="50" align="center" />
+	</sheet>
+	<sheet title="分部分项人工">
+		<column title="项目名称" fieldName="projectname" width="40" align="center" />
+		<column title="单位" fieldName="unit" width="30" align="center" />
+		<column title="工程量" fieldName="projectnumber" width="30" align="center" />
+		<column title="市场单价" fieldName="price" width="30" align="center" />
+		<column title="合价" fieldName="sum" width="30" align="center" />
+		<column title="备注" fieldName="remark" width="50" align="center" />
+	</sheet>
+	<sheet title="分部分项材料">
+		<column title="材料名称" fieldName="materialname" width="40" align="center" />
+		<column title="单位" fieldName="unit" width="30" align="center" />
+		<column title="施工图预算数量" fieldName="constructionnumber" width="30" align="center" />
+		<column title="施工图预算单价" fieldName="constructionprice" width="30" align="center" />
+		<column title="施工图预算合价" fieldName="constructionsum" width="30" align="center" />
+		<column title="项目施工预算数量" fieldName="projectnumber" width="30" align="center" />
+		<column title="项目施工预算单价" fieldName="projectprice" width="30" align="center" />
+		<column title="项目施工预算合价" fieldName="projectsum" width="30" align="center" />
+		<column title="备注" fieldName="remark" width="50" align="center" />
+	</sheet>
+	<sheet title="分部分项机械">
+		<column title="机械名称" fieldName="machinename" width="40" align="center" />
+		<column title="单位" fieldName="unit" width="30" align="center" />
+		<column title="数量" fieldName="number" width="30" align="center" />
+		<column title="单价" fieldName="price" width="30" align="center" />
+		<column title="机械人工费" fieldName="machineprice" width="30" align="center" />
+		<column title="使用周期" fieldName="times" width="30" align="center" />
+		<column title="合计" fieldName="sum" width="30" align="center" />
+		<column title="备注" fieldName="remark" width="50" align="center" />
+	</sheet>
+	<sheet title="分部分项分包">
+		<column title="项目名称" fieldName="materialname" width="40" align="center" />
+		<column title="单位" fieldName="unit" width="30" align="center" />
+		<column title="施工图预算数量" fieldName="constructionnumber" width="30" align="center" />
+		<column title="施工图预算单价" fieldName="constructionprice" width="30" align="center" />
+		<column title="施工图预算合价" fieldName="constructionsum" width="30" align="center" />
+		<column title="项目施工预算数量" fieldName="projectnumber" width="30" align="center" />
+		<column title="项目施工预算单价" fieldName="projectprice" width="30" align="center" />
+		<column title="项目施工预算合价" fieldName="projectsum" width="30" align="center" />
+		<column title="备注" fieldName="remark" width="50" align="center" />
+	</sheet>
+	<sheet title="措施人工">
+		<column title="分部分项名称" fieldName="projectname" width="40" align="center" />
+		<column title="单位" fieldName="unit" width="30" align="center" />
+		<column title="工程量" fieldName="projectnumber" width="30" align="center" />
+		<column title="市场单价" fieldName="price" width="30" align="center" />
+		<column title="合价" fieldName="sum" width="30" align="center" />
+		<column title="备注" fieldName="remark" width="50" align="center" />
+	</sheet>
+	<sheet title="措施机械">
+		<column title="机械名称" fieldName="machinename" width="40" align="center" />
+		<column title="单位" fieldName="unit" width="30" align="center" />
+		<column title="数量" fieldName="number" width="30" align="center" />
+		<column title="单价" fieldName="price" width="30" align="center" />
+		<column title="机械人工费" fieldName="machineprice" width="30" align="center" />
+		<column title="使用周期" fieldName="times" width="30" align="center" />
+		<column title="合计" fieldName="sum" width="30" align="center" />
+		<column title="备注" fieldName="remark" width="50" align="center" />
+	</sheet>
+	<sheet title="措施材料">
+		<column title="材料名称" fieldName="materialname" width="40" align="center" />
+		<column title="单位" fieldName="unit" width="30" align="center" />
+		<column title="施工图预算数量" fieldName="constructionnumber" width="30" align="center" />
+		<column title="施工图预算单价" fieldName="constructionprice" width="30" align="center" />
+		<column title="施工图预算合价" fieldName="constructionsum" width="30" align="center" />
+		<column title="项目施工预算数量" fieldName="projectnumber" width="30" align="center" />
+		<column title="项目施工预算单价" fieldName="projectprice" width="30" align="center" />
+		<column title="项目施工预算合价" fieldName="projectsum" width="30" align="center" />
+		<column title="备注" fieldName="remark" width="50" align="center" />
+	</sheet>
+	<sheet title="抵扣">
+		<column title="明细" fieldName="materialname" width="30" align="center" />
+		<column title="单位" fieldName="unit" width="10" align="center" />
+		<column title="数量" fieldName="number" width="10" align="center" />
+		<column title="市场价（含税）" fieldName="sum" width="15" align="center" />
+		<column title="小计" fieldName="subtotal" width="15" align="center" />
+		<column title="增值税率" fieldName="tax" width="10" align="center" />
+		<column title="增值税  (进项税额）" fieldName="added_tax" width="15" align="center" />
+		<column title="附加税率" fieldName="additional" width="10" align="center" />
+		<column title="附加税" fieldName="additional_tax" width="10" align="center" />
+		<column title="备注" fieldName="remark" width="50" align="center" />
+	</sheet>
+	<sheet title="分部分项材料调差">
+		<column title="明细" fieldName="materialname" width="30" align="center" />
+		<column title="单位" fieldName="unit" width="10" align="center" />
+		<column title="施工图预算数量" fieldName="constructionnumber" width="15" align="center" />
+		<column title="施工图预算单价" fieldName="constructionprice" width="15" align="center" />
+		<column title="施工图预算合价" fieldName="constructionsum" width="15" align="center" />
+		<column title="项目施工预算数量" fieldName="projectnumber" width="15" align="center" />
+		<column title="项目施工预算单价" fieldName="projectprice" width="15" align="center" />
+		<column title="项目施工预算合价" fieldName="projectsum" width="15" align="center" />
+		<column title="施工图预算单价" fieldName="sgprice" width="15" align="center" />
+		<column title="项目施工预算单价" fieldName="xmprice" width="15" align="center" />
+		<column title="风险系数" fieldName="fxxs" width="15" align="center" />
+		<column title="调差" fieldName="tc" width="15" align="center" />
+		<column title="金额" fieldName="tcje" width="15" align="center" />
+	</sheet>
+	<sheet title="调整说明">
+		<column title="调整时间" fieldName="createtime" width="15" align="center" />
+		<column title="调整内容" fieldName="remark" width="100" align="center" />
+	</sheet>
+</excel>

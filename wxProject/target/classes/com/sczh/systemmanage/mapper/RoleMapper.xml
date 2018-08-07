@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sczh.systemmanage.mapper.RoleMapper">
+
+<!-- 定义实体映射关系  -->
+<sql id="roleMappingFiled">
+	t.id          AS "id",
+    t.name        AS "name",
+    t.description AS "description",
+    t.creator     AS "creator",
+    t.create_date AS "createDate",
+    t.modifier    AS "modifier",
+    t.modify_date AS "modifyDate",
+    (select group_concat(tt3.id) from ss_role_permission tt2, ss_permission tt3 where tt2.role_id = t.id and tt3.id=tt2.permission_id) as "permissionIds",
+    (select REPLACE(group_concat(tt3.name), ',', '、') from ss_role_permission tt2, ss_permission tt3 where tt2.role_id = t.id and tt3.id=tt2.permission_id) as "permissionNames"
+</sql>
+
+<!-- 定义分页查询条件  -->
+<sql id="rolePagingQryConditon">
+	1=1
+	<if test="name!=null and name!=''">
+	  AND ttt.name like '%' || #{name,jdbcType=VARCHAR} || '%'
+	</if>
+</sql>
+
+<!-- 分页查询角色信息 -->
+<select id="findRoleByPage" parameterType="java.util.Map" resultType="com.sczh.systemmanage.model.Role">
+	SELECT  <include refid="com.sczh.systemmanage.mapper.RoleMapper.roleMappingFiled" /> 
+ 	      FROM ss_role t
+ 	     WHERE <include refid="com.sczh.systemmanage.mapper.RoleMapper.rolePagingQryConditon" /> 
+ 	   limit #{startRowNo_,jdbcType=NUMERIC},#{endRowNo_,jdbcType=NUMERIC}
+</select>
+
+<!-- 查询角色总条数 -->
+<select id="count" parameterType="java.util.Map" resultType="java.lang.Integer">
+	SELECT count(1) 
+	  FROM ss_role t
+     WHERE <include refid="com.sczh.systemmanage.mapper.RoleMapper.rolePagingQryConditon" /> 
+</select>
+
+<!-- 查看角色信息 -->
+<select id="viewRole" parameterType="com.sczh.systemmanage.model.Role" resultType="com.sczh.systemmanage.model.Role">
+	select <include refid="com.sczh.systemmanage.mapper.RoleMapper.roleMappingFiled" />  
+	  from ss_role t
+	 where t.id = #{id,jdbcType=VARCHAR}
+</select>
+
+<!-- 判断是否存在角色信息 -->
+<select id="isExist" parameterType="com.sczh.systemmanage.model.Role" resultType="java.lang.Integer">
+	select count(1)  
+	  from ss_role t
+	 where 1=1
+   	<if test="name!=null and name!=''">
+   	   and t.name = #{name,jdbcType=VARCHAR}
+   	</if>
+   	<if test="id!=null and id!=''">
+	   and t.id != #{id,jdbcType=VARCHAR}
+   	</if>
+</select>
+
+<!-- 新增角色信息 -->
+<insert id="insert" parameterType="com.sczh.systemmanage.model.Role">
+	insert into ss_role
+	  (id,
+	   name,
+	   description,
+	   creator,
+	   create_date,
+	   modifier,
+	   modify_date)
+	values
+	  (#{id,jdbcType=VARCHAR},
+	   #{name,jdbcType=VARCHAR},
+	   #{description,jdbcType=VARCHAR},
+	   #{creator,jdbcType=VARCHAR},
+	   now(),
+	   null,
+	   null)
+</insert>
+
+<!-- 修改角色信息 -->
+<update id="update" parameterType="com.sczh.systemmanage.model.Role">
+	update ss_role set
+	   name = #{name,jdbcType=VARCHAR},
+	   description = #{description,jdbcType=VARCHAR},
+	   modifier = #{modifier,jdbcType=VARCHAR},
+	   modify_date = now()
+	 where id = #{id,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除角色信息 -->
+<delete id="delete" parameterType="com.sczh.systemmanage.model.Role">
+	delete from ss_role  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<!-- 新增角色与权限的关联 -->
+<insert id="insertRel" parameterType="java.util.Map">
+	insert into ss_role_permission
+	  (role_id,
+	   permission_id)
+	values
+	  (#{roleId,jdbcType=VARCHAR},
+	   #{permissionId,jdbcType=VARCHAR})
+</insert>
+
+<!-- 删除角色与权限的关联 -->
+<delete id="deleteRel" parameterType="com.sczh.systemmanage.model.Role">
+	delete from ss_role_permission where role_id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<!-- 删除角色与用户的关联 -->
+<delete id="deleteRel2" parameterType="com.sczh.systemmanage.model.Role">
+	delete from ss_user_role where role_id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<!-- 查询角色信息 -->
+<select id="findRole" resultType="com.sczh.systemmanage.model.Role">
+	SELECT <include refid="com.sczh.systemmanage.mapper.RoleMapper.roleMappingFiled" /> 
+	  FROM ss_role t
+</select>
+
+</mapper>

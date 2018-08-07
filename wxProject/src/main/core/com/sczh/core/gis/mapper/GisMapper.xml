@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sczh.core.gis.mapper.GisMapper">
+
+	<!-- 查询2G/4G基站(故障) -->
+	<select id="findJiZhanList" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		<choose>
+			<when test="btsFaultType=='退服'">
+				select mv.objectname as object_name,mv.longitude,mv.objectid,mv.countyname,mv.latitude,mv.nettype AS OBJECT_TYPE, '2' AS fault_type,'基站' AS IconType FROM (select e.ne_id FROM fm_alarm e WHERE               
+					e.title in ('OML故障告警',
+					 '[衍生告警]基站退服',
+					 '站点ABIS控制链路断',
+					 'BTS O'||chr(38)||'M LINK FAILURE',
+					 '2G基站退服告警','NodeB退服告警'
+					 ,'TD NodeB退服告警','[衍生告警]LTE基站断站'
+					 ,'基站退出服务'
+					 ,'BASE STATION FAULTY'
+					 ,'4G基站退服告警')
+					 AND e.city='${city}'
+				<if test="btsEquipmentType=='2G'"> 
+					AND e.device_class = 'BTS' 
+				</if>
+				<if test="btsEquipmentType=='4G'">
+					AND e.device_class = 'ENodeB'
+				</if>
+			    <if test="btsEquipmentType=='2G,4G'"> 
+					AND e.device_class != 'NODEB'
+				</if>
+				GROUP BY e.ne_id) f LEFT JOIN rm_allbts_mv mv on mv.objectid = f.ne_id
+			</when>
+			
+			<when test="btsFaultType=='停电'">
+				 SELECT mv.nettype as OBJECT_TYPE ,mv.LONGITUDE,mv.objectid,mv.countyname,mv.LATITUDE,mv.objectname as object_name, '3' as FAULT_TYPE ,'基站' AS IconTyp
+		         FROM fm_alarm e join rm_allbts_mv mv on (e.ne_id = mv.room or e.ne_id=mv.dh_juzhan)
+		         WHERE e.title IN ('交流输入停电告警',
+		                 '直流输出电压过低告警',
+		                 '电池总电压过低',
+		                 '一级低压脱离告警',
+		                 '市电停电告警',
+		                 '一级低压脱离断开告警',
+		                 '电池组总电压过低告警',
+		                 '输出电压过低告警')
+				<if test="btsEquipmentType=='2G'"> 
+					AND mv.nettype = 'GSM' 
+				</if>
+				<if test="btsEquipmentType=='4G'">
+					AND mv.nettype = 'LTE' 
+				</if>
+			    <if test="btsEquipmentType=='2G,4G'"> 
+					AND mv.nettype != 'TD' 
+				</if>
+				AND e.ne_name is not null
+				AND e.city = '${city}'
+				AND mv.COUNTYNAME IS NOT NULL
+				AND e.first_occurrence_time >= SYSDATE - 10
+			</when>
+		       
+			<when test = "btsFaultType=='正常'">
+				SELECT mv.nettype as OBJECT_TYPE ,mv.LONGITUDE,mv.objectid,mv.countyname,mv.LATITUDE,mv.objectname as object_name, '1' as FAULT_TYPE ,'基站' AS IconTyp
+				FROM rm_allbts_mv mv
+				WHERE not EXiSTS (SELECT 1
+				FROM fm_alarm e
+		        WHERE e.title in ('OML故障告警',
+		                          '[衍生告警]基站退服',
+		                          '站点ABIS控制链路断',
+		                          'BTS O' || chr(38) || 'M LINK FAILURE',
+		                          '2G基站退服告警',
+		                          'NodeB退服告警',
+		                          'TD NodeB退服告警',
+		                          '[衍生告警]LTE基站断站',
+		                          '基站退出服务',
+		                          'BASE STATION FAULTY',
+		                          '4G基站退服告警')
+				AND e.ne_id = mv.objectid)
+				AND not EXiSTS (SELECT 1
+				FROM fm_alarm e
+		        WHERE e.title IN ('交流输入停电告警',
+		                          '直流输出电压过低告警',
+		                          '电池总电压过低',
+		                          '一级低压脱离告警',
+		                          '市电停电告警',
+		                          '一级低压脱离断开告警',
+		                          '电池组总电压过低告警',
+		                          '输出电压过低告警')
+				AND (e.ne_id = mv.room or e.ne_id = mv.dh_juzhan))
+				AND mv.regionname = '${city}'
+				<if test="btsEquipmentType=='2G'">
+					AND mv.nettype = 'GSM'
+				</if>
+				<if test="btsEquipmentType=='4G'">
+					AND mv.nettype = 'LTE' 
+				</if>
+			    <if test="btsEquipmentType=='2G,4G'"> 
+					AND mv.nettype != 'TD' 
+				</if>
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 获取菜单 -->
+	<select id="getCityMenu" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT tb2.id AS "id",
+		       tb2.name AS "name",
+		       tb2.parentId AS "parentId",
+		       LEVEL AS "level",
+		       sys_connect_by_path(tb2.name, '-') AS "full_name"
+		FROM (SELECT t2.objectid ID,
+		      t2.objectname NAME,
+		      DECODE(t2.objecttype, '省', NULL, t2.parentobject) parentId
+			  FROM rm_region t2
+			  WHERE t2.objecttype IN ('省', '地市', '区县')) tb2
+		START WITH tb2.parentId IS NULL
+		CONNECT BY PRIOR tb2.id = tb2.parentId
+		ORDER SIBLINGS BY tb2.name
+	</select>
+	
+	<!-- 查询2G/4G基站(故障) -->
+	<select id="getCountynamePosition" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		<choose>
+			<when test="btsFaultType=='退服'">
+				select mv.objectname as object_name,mv.longitude,mv.countyname,mv.objectid,mv.countyname,mv.latitude,mv.nettype AS OBJECT_TYPE, '2' AS fault_type ,'基站' AS IconTyp FROM (select e.ne_id FROM fm_alarm e WHERE               
+					e.title in ('OML故障告警',
+					 '[衍生告警]基站退服',
+					 '站点ABIS控制链路断',
+					 'BTS O'||chr(38)||'M LINK FAILURE',
+					 '2G基站退服告警','NodeB退服告警'
+					 ,'TD NodeB退服告警','[衍生告警]LTE基站断站'
+					 ,'基站退出服务'
+					 ,'BASE STATION FAULTY'
+					 ,'4G基站退服告警')
+					 AND e.DISTRICT='${countyname}' 
+				<if test="btsEquipmentType=='2G'"> 
+					AND e.device_class = 'BTS' 
+				</if>
+				<if test="btsEquipmentType=='4G'">
+					AND e.device_class = 'ENodeB'
+				</if>
+			    <if test="btsEquipmentType=='2G,4G'"> 
+					AND e.device_class != 'NODEB'
+				</if>
+				GROUP BY e.ne_id) f LEFT JOIN rm_allbts_mv mv on mv.objectid = f.ne_id
+			</when>
+			
+			<when test="btsFaultType=='停电'">
+				 SELECT mv.nettype as OBJECT_TYPE ,mv.LONGITUDE,mv.countyname,mv.objectid,mv.countyname,mv.LATITUDE,mv.objectname as object_name, '3' as FAULT_TYPE ,'基站' AS IconTyp 
+		         FROM fm_alarm e join rm_allbts_mv mv on (e.ne_id = mv.room or e.ne_id=mv.dh_juzhan)
+		         WHERE e.title IN ('交流输入停电告警',
+		                 '直流输出电压过低告警',
+		                 '电池总电压过低',
+		                 '一级低压脱离告警',
+		                 '市电停电告警',
+		                 '一级低压脱离断开告警',
+		                 '电池组总电压过低告警',
+		                 '输出电压过低告警')
+				<if test="btsEquipmentType=='2G'"> 
+					AND mv.nettype = 'GSM' 
+				</if>
+				<if test="btsEquipmentType=='4G'">
+					AND mv.nettype = 'LTE' 
+				</if>
+			    <if test="btsEquipmentType=='2G,4G'"> 
+					AND mv.nettype != 'TD' 
+				</if>
+				AND e.DISTRICT='${countyname}' 
+				AND e.ne_name is not null
+				AND mv.COUNTYNAME IS NOT NULL
+				AND e.first_occurrence_time >= SYSDATE - 10
+			</when>
+		       
+			<when test = "btsFaultType=='正常'">
+				SELECT mv.nettype as OBJECT_TYPE ,mv.LONGITUDE,mv.countyname,mv.countyname,mv.objectid,mv.countyname,mv.LATITUDE,mv.objectname as object_name, '1' as FAULT_TYPE ,'基站' AS IconTyp 
+				FROM rm_allbts_mv mv
+				WHERE not EXiSTS (SELECT 1
+				FROM fm_alarm e
+		        WHERE e.title in ('OML故障告警',
+		                          '[衍生告警]基站退服',
+		                          '站点ABIS控制链路断',
+		                          'BTS O' || chr(38) || 'M LINK FAILURE',
+		                          '2G基站退服告警',
+		                          'NodeB退服告警',
+		                          'TD NodeB退服告警',
+		                          '[衍生告警]LTE基站断站',
+		                          '基站退出服务',
+		                          'BASE STATION FAULTY',
+		                          '4G基站退服告警')
+				AND e.ne_id = mv.objectid)
+				AND not EXiSTS (SELECT 1
+				FROM fm_alarm e
+		        WHERE e.title IN ('交流输入停电告警',
+		                          '直流输出电压过低告警',
+		                          '电池总电压过低',
+		                          '一级低压脱离告警',
+		                          '市电停电告警',
+		                          '一级低压脱离断开告警',
+		                          '电池组总电压过低告警',
+		                          '输出电压过低告警')
+				AND (e.ne_id = mv.room or e.ne_id = mv.dh_juzhan))
+				AND mv.countyname='${countyname}' 
+				<if test="btsEquipmentType=='2G'">
+					AND mv.nettype = 'GSM'
+				</if>
+				<if test="btsEquipmentType=='4G'">
+					AND mv.nettype = 'LTE' 
+				</if>
+			    <if test="btsEquipmentType=='2G,4G'"> 
+					AND mv.nettype != 'TD' 
+				</if>
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 全省 查询2G/4G基站(故障) -->
+	<select id="loadProvinceBData" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		<choose>
+			<when test="btsFaultType=='退服'">
+				select mv.objectname as object_name,mv.longitude,mv.objectid,mv.countyname,mv.latitude,mv.nettype AS OBJECT_TYPE, '2' AS fault_type ,'基站' AS IconTyp FROM (select e.ne_id FROM fm_alarm e WHERE               
+					e.title in ('OML故障告警',
+					 '[衍生告警]基站退服',
+					 '站点ABIS控制链路断',
+					 'BTS O'||chr(38)||'M LINK FAILURE',
+					 '2G基站退服告警','NodeB退服告警'
+					 ,'TD NodeB退服告警','[衍生告警]LTE基站断站'
+					 ,'基站退出服务'
+					 ,'BASE STATION FAULTY'
+					 ,'4G基站退服告警')
+				<if test="btsEquipmentType=='2G'"> 
+					AND e.device_class = 'BTS' 
+				</if>
+				<if test="btsEquipmentType=='4G'">
+					AND e.device_class = 'ENodeB'
+				</if>
+			    <if test="btsEquipmentType=='2G,4G'"> 
+					AND e.device_class != 'NODEB'
+				</if>
+				GROUP BY e.ne_id) f LEFT JOIN rm_allbts_mv mv on mv.objectid = f.ne_id
+			</when>
+			
+			<when test="btsFaultType=='停电'">
+				 SELECT mv.nettype as OBJECT_TYPE ,mv.LONGITUDE,mv.objectid,mv.countyname,mv.LATITUDE,mv.objectname as object_name, '3' as FAULT_TYPE ,'基站' AS IconTyp 
+		         FROM fm_alarm e join rm_allbts_mv mv on (e.ne_id = mv.room or e.ne_id=mv.dh_juzhan)
+		         WHERE e.title IN ('交流输入停电告警',
+		                 '直流输出电压过低告警',
+		                 '电池总电压过低',
+		                 '一级低压脱离告警',
+		                 '市电停电告警',
+		                 '一级低压脱离断开告警',
+		                 '电池组总电压过低告警',
+		                 '输出电压过低告警')
+				<if test="btsEquipmentType=='2G'"> 
+					AND mv.nettype = 'GSM' 
+				</if>
+				<if test="btsEquipmentType=='4G'">
+					AND mv.nettype = 'LTE' 
+				</if>
+			    <if test="btsEquipmentType=='2G,4G'"> 
+					AND mv.nettype != 'TD' 
+				</if>
+				AND e.ne_name is not null
+				AND mv.COUNTYNAME IS NOT NULL
+				AND e.first_occurrence_time >= SYSDATE - 10
+			</when>
+		       
+			<when test = "btsFaultType=='正常'">
+				SELECT mv.nettype as OBJECT_TYPE ,mv.LONGITUDE,mv.objectid,mv.countyname,mv.LATITUDE,mv.objectname as object_name, '1' as FAULT_TYPE ,'基站' AS IconTyp 
+				FROM rm_allbts_mv mv
+				WHERE not EXiSTS (SELECT 1
+				FROM fm_alarm e
+		        WHERE e.title in ('OML故障告警',
+		                          '[衍生告警]基站退服',
+		                          '站点ABIS控制链路断',
+		                          'BTS O' || chr(38) || 'M LINK FAILURE',
+		                          '2G基站退服告警',
+		                          'NodeB退服告警',
+		                          'TD NodeB退服告警',
+		                          '[衍生告警]LTE基站断站',
+		                          '基站退出服务',
+		                          'BASE STATION FAULTY',
+		                          '4G基站退服告警')
+				AND e.ne_id = mv.objectid)
+				AND not EXiSTS (SELECT 1
+				FROM fm_alarm e
+		        WHERE e.title IN ('交流输入停电告警',
+		                          '直流输出电压过低告警',
+		                          '电池总电压过低',
+		                          '一级低压脱离告警',
+		                          '市电停电告警',
+		                          '一级低压脱离断开告警',
+		                          '电池组总电压过低告警',
+		                          '输出电压过低告警')
+				AND (e.ne_id = mv.room or e.ne_id = mv.dh_juzhan))
+				<if test="btsEquipmentType=='2G'">
+					AND mv.nettype = 'GSM'
+				</if>
+				<if test="btsEquipmentType=='4G'">
+					AND mv.nettype = 'LTE' 
+				</if>
+			    <if test="btsEquipmentType=='2G,4G'"> 
+					AND mv.nettype != 'TD' 
+				</if>
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 查询基站资源 -->
+	<select id="searchResourceInfo" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT distinct res_column,res_type,res_table,res_col_label,alias,resource_type
+		    FROM(
+				SELECT
+				t.res_type,t.res_table,upper(t.res_column)
+				res_column,t.res_col_label,upper(t.alias) alias,resource_type
+				FROM resto_type t
+				WHERE trim(t.res_type) = '${OBJECT_TYPE}'
+				AND t.is_disp = '1' 
+		    )
+	</select>
+	
+	<!-- 查询小区-->
+	<select id="queryProCellNum" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT count(distinct p.objectid) count
+	    FROM (SELECT t.* FROM project_info t WHERE t.begin_time &lt;= sysdate AND t.end_time &gt;= sysdate) p,
+	    <if test="OBJECT_TYPE=='BTS'">
+	    	(SELECT * FROM rm_cell t WHERE t.bts = '${OBJECTID}') b 
+	    </if>
+	    <if test="OBJECT_TYPE=='ENODEB'"> 
+	    	(SELECT * FROM rm_utrancell t WHERE t.nodeb = '${OBJECTID}') b 
+	    </if>
+	    WHERE p.objectid = b.objectid
+	</select>
+	
+	<!-- 查询小区-->
+	<select id="queryColumns" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		${sql}
+	</select>
+	
+	<!-- 性能查看 -->
+	<select id="searchCapInfo" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT t.perf_table,upper(t.perf_column) perf_column,t.perf_col_label,trim(t.perf_units) perf_units  
+		FROM 
+			pfto_type t 
+		WHERE 
+			t.perf_res_type = '${neType}'
+		AND perf_nms_type = '${nmsType}'
+		AND is_disp = '1'
+	    ORDER by perf_level asc
+	</select>
+	
+	<!-- 性能查看数据查询 -->
+	<select id="searchCapInfoMessage" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		${sql}
+	</select>
+	
+	<!-- 告警字段查看 -->
+	<select id="queryGiveAnAlarmCoulmn" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		select t.RES_COLUMN,t.RES_TABLE,t.RESOURCE_TYPE,t.RES_COL_LABEL from alarm_COLUMN t
+	</select>
+	
+	<!-- 告警数据查看 -->
+	<select id="queryGiveAnAlarmLine" parameterType="java.util.Map" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		${sql}
+	</select>
+	
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sczh.core.task.mapper.TaskConfigMapper">
+   	<!-- 查询定时任务配置 -->
+	<select id="qryTaskConfig" resultType="org.springframework.util.LinkedCaseInsensitiveMap" parameterType="java.util.HashMap">    
+		select t.task_id,
+		       t.task_name,
+		       t.cron_expr,
+		       t.job_class,
+		       t.state
+		  from SS_TASK_CONFIG t
+		 where t.state = '有效'
+	</select>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+     http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<!-- 字典表数据配置  -->
+	<bean id="dictUtils" class="com.sczh.core.dict.DictUtils" lazy-init="false" scope="singleton">
+		<property name="dictTable">
+			<list>
+				<!-- 用户状态 -->
+				<bean class="com.sczh.core.dict.Dict">
+					<property name="name" value="user_state" />
+					<property name="dictItems">
+						<map>
+							<entry key="启用" value="启用" />
+							<entry key="停用" value="停用" />
+						</map>
+					</property>
+				</bean>
+				<!-- 是否是菜单 -->
+				<bean class="com.sczh.core.dict.Dict">
+					<property name="name" value="permission_isMenu" />
+					<property name="dictItems">
+						<map>
+							<entry key="1" value="是" />
+							<entry key="0" value="否" />
+						</map>
+					</property>
+				</bean>
+				<!-- 用户所属地市 -->
+	<bean class="com.sczh.core.dict.Dict">
+		<property name="name" value="user_city" />
+		<property name="dictItems">
+			<map>
+				<entry key="省公司" value="省公司" />
+				<entry key="巴中" value="巴中" />
+				<entry key="达州" value="达州" />
+				<entry key="德阳" value="德阳" />
+				<entry key="甘孜" value="甘孜" />
+				<entry key="广安" value="广安" />
+				<entry key="广元" value="广元" />
+				<entry key="乐山" value="乐山" />
+				<entry key="凉山" value="凉山" />
+				<entry key="泸州" value="泸州" />
+				<entry key="眉山" value="眉山" />
+				<entry key="宜宾" value="宜宾" />
+				<entry key="自贡" value="自贡" />
+				<entry key="资阳" value="资阳" />
+				<entry key="绵阳" value="绵阳" />
+				<entry key="内江" value="内江" />
+				<entry key="南充" value="南充" />
+				<entry key="攀枝花" value="攀枝花" />
+				<entry key="遂宁" value="遂宁" />
+				<entry key="雅安" value="雅安" />
+				<entry key="阿坝" value="阿坝" />
+				<entry key="成都" value="成都" />
+			</map>
+		</property>
+	</bean>
+			</list>
+		</property>
+	</bean>	
+</beans>

@@ -1,0 +1,53 @@
+.input-file{
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    width: auto;
+    background-color: #1E9FFF;
+    border: solid 1px #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 18px;
+    color:#fff;
+    text-decoration: none;
+}
+.input-file input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 14px;
+    background-color: #fff;
+    transform: translate(-300px, 0px) scale(4);
+    height: 40px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+ }
+ #dsourceFileTable {    border-radius: 25px;}
+ #dsourceFileTable td{color:#000;}
+ #dsourceFileTable th{color:#000;}
+ @charset "utf-8";
+/* CSS Document */
+.gaitb{ width:690px; height:auto; margin:15px auto; font-size:14px;}
+.gaitb tr{ height:40px;}
+.gaitv{ background:#A5A5A5; margin-top:10px; padding-right:5px; padding-bottom:5px;}
+.gaitq{ border:#dbdbdb 1px solid; margin-left:5px; background:#fff;}
+.gaitq tr{border:none; border-bottom:1px solid #CCC;}
+input{ font-family:Microsoft YaHei, Arial; font-size:12px; color:#727272}
+.zca1{ width:74px; text-align:center}
+.zca2{ width:398px; text-align:left;font-size:13px;}
+.zca3{ text-align:center;width: 40px;}
+.avaq{ background:#DADADA;}
+.gaitb a{ font-size:14px; color:#0b9de9}
+.controls{ margin:10px 0 0 320px; height:40px;}
+.uurr textarea{ width:98%; height:40px; line-height:22px; padding-left:3px;}
+.gy_btn{ width:116px; height:35px; border:none; background:url(../../images/baoc.gif) no-repeat; text-align:center; line-height:33px; font-size:14px; font-weight:bold; color:#fff; outline:none; cursor:pointer}
+.gy_btn:hover{ background:url(../../images/baoc.gif) 0 -41px no-repeat}
+.delBtns{background: #f8f8f8;font-size:14px;}
+.delBtns a{line-height: 34px;height:35px;}
+
+/*±ß¿ò*/
+.explam{height: auto;width: 90%;border: 1px solid #BED5F3;position: relative;margin:10px;padding:30px;margin-bottom:60px}
+.exp_nav{background:#fff;position: absolute;padding:0px 23px 0px 23px;border:1px solid #BED5F3;font-size:14px;color:#FF6C2F;line-height: 30px;text-align: center;top:-15px;left:20px;z-index: 99999;}

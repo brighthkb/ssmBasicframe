@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sczh.weixin.mapper.WxUserMapper" >
+  <resultMap id="BaseResultMap" type="com.sczh.weixin.model.WxUser" >
+    <constructor >
+      <idArg column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="openid" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="nickname" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sex" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="headimgurl" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="subscribe" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    w.id, w.phone, w.openid, w.nickname,w.name, w.sex, w.headimgurl, w.subscribe
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select <include refid="Base_Column_List" />
+  	from ss_wxuser w  where w.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByInfo" resultMap="BaseResultMap" parameterType="com.sczh.weixin.model.WxUser" >
+    select <include refid="Base_Column_List" /> from ss_wxuser w where 1=1
+    <if test="openid!=null and openid!=''">
+	   and w.openid = #{openid,jdbcType=VARCHAR}
+	</if>
+	<if test="phone!=null and phone!=''">
+	   	 and w.phone = #{phone,jdbcType=VARCHAR}
+	 </if>
+     limit 1;
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ss_wxuser
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByphone" parameterType="java.lang.String" >
+    delete from ss_wxuser
+    where phone = #{phone,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sczh.weixin.model.WxUser" >
+    insert into ss_wxuser (id, phone, openid, 
+      nickname,name, sex, headimgurl, 
+      subscribe)
+    values (#{id,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{headimgurl,jdbcType=VARCHAR}, 
+      #{subscribe,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sczh.weixin.model.WxUser" >
+    insert into ss_wxuser
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl,
+      </if>
+      <if test="subscribe != null" >
+        subscribe,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="headimgurl != null" >
+        #{headimgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="subscribe != null" >
+        #{subscribe,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sczh.weixin.model.WxUser" >
+    update ss_wxuser
+    <set >
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl = #{headimgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="subscribe != null" >
+        subscribe = #{subscribe,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sczh.weixin.model.WxUser" >
+    update ss_wxuser
+    set phone = #{phone,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      headimgurl = #{headimgurl,jdbcType=VARCHAR},
+      subscribe = #{subscribe,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

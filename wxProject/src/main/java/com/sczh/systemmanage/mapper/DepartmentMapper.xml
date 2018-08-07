@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sczh.systemmanage.mapper.DepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.sczh.systemmanage.model.Department" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="linkman" property="linkman" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, linkman, tel
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ss_department
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ss_department
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sczh.systemmanage.model.Department" >
+    insert into ss_department (id, name, linkman, 
+      tel,status)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{linkman,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{status,jdbcType=NUMERIC})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sczh.systemmanage.model.Department" >
+    insert into ss_department
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="linkman != null" >
+        linkman,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null" >
+        #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sczh.systemmanage.model.Department" >
+    update ss_department
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="linkman != null" >
+        linkman = #{linkman,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+       <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sczh.systemmanage.model.Department" >
+    update ss_department
+    set name = #{name,jdbcType=VARCHAR},
+      linkman = #{linkman,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <!-- 分页查询用户信息 -->
+<select id="findDeptByPage" parameterType="java.util.Map" resultType="com.sczh.systemmanage.model.Department">
+		  	 SELECT t.*
+				  	  FROM ss_department t
+				  	 WHERE t.status = 0
+					  <if test="id != null" >
+				       and  t.id = #{id,jdbcType=VARCHAR}
+				      </if>
+				      <if test="name != null" >
+				        and t.name like #{name,jdbcType=VARCHAR}
+				      </if>
+		  	 	limit #{startRowNo_,jdbcType=NUMERIC},#{endRowNo_,jdbcType=NUMERIC}
+</select>
+<select id="findAllDept" parameterType="java.util.Map" resultType="com.sczh.systemmanage.model.Department">
+		  	 SELECT t.*
+				  	  FROM ss_department t
+				  	 WHERE t.status = 0
+					  <if test="id != null" >
+				       and  t.id = #{id,jdbcType=VARCHAR}
+				      </if>
+				      <if test="name != null" >
+				        and t.name like #{name,jdbcType=VARCHAR}
+				      </if>
+</select>
+<select id="count" parameterType="java.util.Map" resultType="java.lang.Integer">
+	SELECT count(1) 
+	   FROM ss_department t
+  	 WHERE t.status = 0
+	  <if test="id != null" >
+       and  t.id = #{id,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+        and t.name like #{name,jdbcType=VARCHAR}
+      </if>
+</select>
+<!-- 判断是否存在用户信息 -->
+<select id="isExist" parameterType="com.sczh.systemmanage.model.Department" resultType="java.lang.Integer">
+	select count(1)  
+	  from ss_department t
+	 where 1=1
+   	<if test="name!=null and name!=''">
+   	   and t.name = #{name,jdbcType=VARCHAR}
+   	</if>
+</select>
+</mapper>

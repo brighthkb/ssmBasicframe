@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sczh.systemmanage.mapper.UserMapper">
+
+<!-- 定义实体映射关系  -->
+<sql id="userMappingFiled">
+	t.id          as "id",
+	t.login_name  as "loginName",
+	t.password    as "password",
+	t.salt        as "salt",
+	t.name        as "name",
+	t.dept        as "dept",
+	t.email       as "email",
+	t.tel         as "tel",
+	t.creator     as "creator",
+	(select tt1.name from SS_USER tt1 where tt1.id = t.creator) as "creatorName",
+	t.create_date as "createDate",
+	t.modifier    as "modifier",
+	t.modify_date as "modifyDate",
+	t.state       as "state",
+	(select group_concat(tt3.id) from ss_user_role tt2, ss_role tt3 where tt2.user_id = t.id and tt3.id=tt2.role_id) as "roleIds",
+	(select REPLACE(group_concat(tt3.name), ',', '、') from ss_user_role tt2, ss_role tt3 where tt2.user_id = t.id and tt3.id=tt2.role_id) as "roleNames",
+	t.city
+</sql>
+
+<!-- 定义分页查询条件  -->
+<sql id="userPagingQryConditon">
+	1=1
+	<if test="loginName!=null and loginName!=''">
+       AND LOWER(t.login_name) like '%' || LOWER(#{loginName,jdbcType=VARCHAR}) || '%'
+    </if>
+    <if test="state!=null and state!=''">
+       AND t.state = #{state,jdbcType=VARCHAR}
+    </if>
+    <if test="dept!=null and dept!=''">
+       AND t.dept like '%' || #{dept,jdbcType=VARCHAR} || '%'
+    </if>
+    <if test="createDate_start!=null and createDate_start!=''">
+       AND t.create_date <![CDATA[ >= ]]> to_date(#{createDate_start,jdbcType=VARCHAR} || ' 00:00:00', 'yyyy-mm-dd hh24:mi:ss')
+    </if>
+    <if test="createDate_end!=null and createDate_end!=''">
+       AND t.create_date <![CDATA[ <= ]]> to_date(#{createDate_end,jdbcType=VARCHAR} || ' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+    </if>
+</sql>
+
+<!-- 分页查询用户信息 -->
+<select id="findUserByPage" parameterType="java.util.Map" resultType="com.sczh.systemmanage.model.User">
+		  	 SELECT  <include refid="com.sczh.systemmanage.mapper.UserMapper.userMappingFiled" /> 
+				  	  FROM ss_user t
+				  	 WHERE <include refid="com.sczh.systemmanage.mapper.UserMapper.userPagingQryConditon" /> 
+		  	 	limit #{startRowNo_,jdbcType=NUMERIC},#{endRowNo_,jdbcType=NUMERIC}
+</select>
+
+<!-- 查询用户总条数 -->
+<select id="count" parameterType="java.util.Map" resultType="java.lang.Integer">
+	SELECT count(1) 
+	  FROM ss_user t
+	 WHERE <include refid="com.sczh.systemmanage.mapper.UserMapper.userPagingQryConditon" /> 
+</select>
+
+<!-- 查看用户信息-->
+<select id="viewUser" parameterType="com.sczh.systemmanage.model.User" resultType="com.sczh.systemmanage.model.User">
+	select <include refid="com.sczh.systemmanage.mapper.UserMapper.userMappingFiled" /> 
+	  FROM ss_user t
+	 WHERE
+	 <choose>
+	 	<when test="loginName!=null and loginName!=''">
+	 	   t.login_name = #{loginName,jdbcType=VARCHAR}
+	 	</when>
+	 	<when test="id!=null and id!=''">
+	 	   t.id = #{id,jdbcType=VARCHAR}
+	 	</when>
+	 	<otherwise> 1!=1 </otherwise>
+	 </choose>
+</select>
+
+<!-- 判断是否存在用户信息 -->
+<select id="isExist" parameterType="com.sczh.systemmanage.model.User" resultType="java.lang.Integer">
+	select count(1)  
+	  from ss_user t
+	 where 1=1
+   	<if test="loginName!=null and loginName!=''">
+   	   and t.login_name = #{loginName,jdbcType=VARCHAR}
+   	</if>
+   	<if test="id!=null and id!=''">
+	   and t.id != #{id,jdbcType=VARCHAR}
+   	</if>
+</select>
+
+<!-- 根据条件查询用户列表信息-->
+<select id="findUserBy" parameterType="java.util.Map" resultType="com.sczh.systemmanage.model.User">
+	select <include refid="com.sczh.systemmanage.mapper.UserMapper.userMappingFiled" /> 
+	  FROM ss_user t,ss_department d
+	 WHERE 1=1 and d.status = 0 and t.dept=d.id
+	 <if test="dname!=null and dname!=''">
+	   	and d.name=#{dname,jdbcType=VARCHAR}
+	 </if>
+	 order by  t.create_date desc
+</select>
+
+<!-- 新增用户信息 -->
+<insert id="insert" parameterType="com.sczh.systemmanage.model.User">
+	insert into ss_user
+	  (id,
+	   login_name,
+	   password,
+	   salt,
+	   name,
+	   dept,
+	   email,
+	   tel,
+	   creator,
+	   create_date,
+	   modifier,
+	   modify_date,
+	   state,
+	   city)
+	values
+	  (#{id,jdbcType=VARCHAR},
+	   #{loginName,jdbcType=VARCHAR},
+	   #{password,jdbcType=VARCHAR},
+	   #{salt,jdbcType=VARCHAR},
+	   #{name,jdbcType=VARCHAR},
+	   #{dept,jdbcType=VARCHAR},
+	   #{email,jdbcType=VARCHAR},
+	   #{tel,jdbcType=VARCHAR},
+	   #{creator,jdbcType=VARCHAR},
+	   now(),
+	   null,
+	   null,
+	   #{state,jdbcType=VARCHAR},
+	   #{city,jdbcType=VARCHAR})
+</insert>
+
+<!-- 修改用户信息 -->
+<update id="update" parameterType="com.sczh.systemmanage.model.User">
+	update ss_user set
+	   login_name = #{loginName,jdbcType=VARCHAR},
+	   password = #{password,jdbcType=VARCHAR},
+	   salt = #{salt,jdbcType=VARCHAR},
+	   name = #{name,jdbcType=VARCHAR},
+	   dept = #{dept,jdbcType=VARCHAR},
+	   email = #{email,jdbcType=VARCHAR},
+	   tel = #{tel,jdbcType=VARCHAR},
+	   modifier = #{modifier,jdbcType=VARCHAR},
+	   modify_date = now(),
+	   state = #{state,jdbcType=VARCHAR},
+	   city = #{city,jdbcType=VARCHAR}
+	 where id = #{id,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除用户信息 -->
+<delete id="delete" parameterType="com.sczh.systemmanage.model.User">
+	delete from ss_user  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<!-- 新增用户与角色的关联 -->
+<insert id="insertRel" parameterType="java.util.Map">
+	insert into ss_user_role
+	  (user_id,
+	   role_id)
+	values
+	  (#{userId,jdbcType=VARCHAR},
+	   #{roleId,jdbcType=VARCHAR})
+</insert>
+
+<!-- 删除用户与角色的关联 -->
+<delete id="deleteRel" parameterType="com.sczh.systemmanage.model.User">
+	delete from ss_user_role where user_id = #{id,jdbcType=VARCHAR}
+</delete>
+
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sczh.systemmanage.mapper.PermissionMapper">
+
+<!-- 定义实体映射关系  -->
+<sql id="permissionMappingFiled">
+	t.id             AS "id",
+    t.name           AS "name",
+    t.permission_key AS "permissionKey",
+    t.is_menu        AS "isMenu",
+    t.menu_url       AS "menuUrl",
+    t.menu_icon      AS "menuIcon",
+    t.order_no       AS "orderNo",
+    t.parent_id      AS "parentId",
+    t.creator        AS "creator",
+    t.create_date    AS "createDate",
+    t.modifier       AS "modifier",
+    t.modify_date    AS "modifyDate"
+</sql>
+
+<!-- 查询权限信息 -->
+<select id="findPermission" parameterType="java.util.Map" resultType="com.sczh.systemmanage.model.Permission">
+	select <include refid="com.sczh.systemmanage.mapper.PermissionMapper.permissionMappingFiled" />  
+	  from (
+	  		select *
+	  		  from ss_permission t1
+	  		 where 1=1
+	  		 <if test="isOnlyMenu">
+			   and t1.is_menu = 1
+			 </if>
+	       ) t
+	      	where FIND_IN_SET(id, queryChildPermission(#{parentId,jdbcType=VARCHAR}))
+ <!-- START WITH parent_id 
+	 <choose>
+		 <when test="parentId!=null and parentId!=''"> = #{parentId,jdbcType=VARCHAR} </when>
+		 <otherwise> is null </otherwise>
+	 </choose>
+	CONNECT BY PRIOR ID = parent_id -->
+	 ORDER BY order_no
+</select>
+
+<!-- 查询用户拥有的权限 -->
+<select id="findPermissionOfUser" parameterType="java.util.Map" resultType="com.sczh.systemmanage.model.Permission">
+	select <include refid="com.sczh.systemmanage.mapper.PermissionMapper.permissionMappingFiled" />  
+	  from (
+		    select distinct t1.*
+			  from ss_permission t1, ss_role_permission t2, ss_user_role t3
+			 where t3.user_id = #{userId,jdbcType=VARCHAR}
+			   and t3.role_id = t2.role_id
+			   and t2.permission_id = t1.id
+			   <if test="isOnlyMenu">
+			   and t1.is_menu = 1
+			   </if>
+	  	   ) t
+	 ORDER BY order_no
+</select>
+
+<!-- 查看权限信息 -->
+<select id="viewPermission" parameterType="com.sczh.systemmanage.model.Permission" resultType="com.sczh.systemmanage.model.Permission">
+	select <include refid="com.sczh.systemmanage.mapper.PermissionMapper.permissionMappingFiled" />  
+	  from ss_permission t
+	 where
+	 <choose>
+	 	<when test="permissionKey!=null and permissionKey!=''">
+	 	   t.permission_key = #{permissionKey,jdbcType=VARCHAR}
+	 	</when>
+	 	<when test="id!=null and id!=''">
+	 	   t.id = #{id,jdbcType=VARCHAR}
+	 	</when>
+	 	<otherwise> 1!=1 </otherwise>
+	 </choose>
+</select>
+
+<!-- 判断是否存在权限信息 -->
+<select id="isExist" parameterType="com.sczh.systemmanage.model.Permission" resultType="java.lang.Integer">
+	select count(1)  
+	  from ss_permission t
+	 where 1=1
+   	<if test="permissionKey!=null and permissionKey!=''">
+   	   and t.permission_key = #{permissionKey,jdbcType=VARCHAR}
+   	</if>
+   	<if test="id!=null and id!=''">
+	   and t.id != #{id,jdbcType=VARCHAR}
+   	</if>
+</select>
+
+<!-- 新增权限信息 -->
+<insert id="insert" parameterType="com.sczh.systemmanage.model.Permission">
+	insert into SS_PERMISSION
+	  (id,
+	   name,
+	   permission_key,
+	   is_menu,
+	   menu_url,
+	   menu_icon,
+	   order_no,
+	   parent_id,
+	   creator,
+	   create_date,
+	   modifier,
+	   modify_date)
+	values
+	  (#{id,jdbcType=VARCHAR},
+	   #{name,jdbcType=VARCHAR},
+	   #{permissionKey,jdbcType=VARCHAR},
+	   #{isMenu,jdbcType=NUMERIC},
+	   #{menuUrl,jdbcType=VARCHAR},
+	   #{menuIcon,jdbcType=VARCHAR},
+	   #{orderNo,jdbcType=NUMERIC},
+	   #{parentId,jdbcType=VARCHAR},
+	   #{creator,jdbcType=VARCHAR},
+	   now(),
+	   null,
+	   null)
+</insert>
+
+<!-- 修改权限信息 -->
+<update id="update" parameterType="com.sczh.systemmanage.model.Permission">
+	update SS_PERMISSION set
+	   name = #{name,jdbcType=VARCHAR},
+	   permission_key = #{permissionKey,jdbcType=VARCHAR},
+	   is_menu = #{isMenu,jdbcType=NUMERIC},
+	   menu_url = #{menuUrl,jdbcType=VARCHAR},
+	   menu_icon = #{menuIcon,jdbcType=VARCHAR},
+	   order_no = #{orderNo,jdbcType=NUMERIC},
+	   parent_id = #{parentId,jdbcType=VARCHAR},
+	   modifier = #{modifier,jdbcType=VARCHAR},
+	   modify_date = now()
+	 where id = #{id,jdbcType=VARCHAR}
+</update>
+
+<!-- 删除权限信息 -->
+<delete id="delete" parameterType="com.sczh.systemmanage.model.Permission">
+	delete from SS_PERMISSION  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<!-- 删除角色与权限的关联 -->
+<delete id="deleteRel" parameterType="com.sczh.systemmanage.model.Permission">
+	delete from ss_role_permission where permission_id = #{id,jdbcType=VARCHAR}
+</delete>
+
+</mapper>

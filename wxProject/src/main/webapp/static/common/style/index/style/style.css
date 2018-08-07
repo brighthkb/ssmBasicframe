@@ -1,0 +1,336 @@
+@charset "utf-8";
+
+body {
+	background: rgb(246, 248, 249);
+	margin: 0;
+	padding: 0;
+	border: 0 none;
+	overflow: hidden;
+	height: 100%;
+	color: #FFF;
+	font-family: '微软雅黑'，Regular;
+	font-size: 12px;
+}
+.content {
+	width:100%;
+	height:100%;
+	margin:0px;
+	padding: 0;
+	background-image: url('../images/bg.png');
+	background-repeat: repeat-x;
+}
+.main-content {
+	width: auto;
+	height: auto;
+	color: #FFF;
+	font-family: '微软雅黑'，Regular;
+	font-size: 12px;
+	margin: 0 auto;
+}
+.head {
+	width: 100%;
+	height: 110px;
+	background-color: #108EDB1;
+}
+.head-logo {
+	/* background-image: url('../images/sc.png'); 
+	background-repeat: no-repeat; */
+	width: 100%;
+	height: 68px;
+	background-color: #0571D2;
+}
+.nav-bar {
+	max-width: 100%;
+	height: 38px;
+	border:0px;
+	cellspacing:0px;
+    cellpadding:0px;
+}
+.denglu {
+	height: 18px;
+	line-height: 18px;
+}
+.denglu-item {
+	padding-right: 20px;
+	display: inline-block;
+	vertical-align:bottom;
+	font-size: 12px;
+	height:16px;
+	line-height: 16px;
+}
+.denglu-item img{
+	margin-right: 3px;
+	vertical-align:bottom;
+	width:16px; 
+	height:16px;
+}
+.line {
+	width: 100%;
+	height: 1px;
+	margin:0;
+	background-color: #99CCCC;
+}
+.page-container{
+	background-color: transparent;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	overflow-x:hidden;
+    overflow-y:hidden;
+}
+.page{
+	background-color: transparent;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0; 
+	border: 0;
+	overflow-x:hidden;
+    overflow-y:auto;
+}
+
+/*公共头部*/
+.main-head{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	    height: 80px;
+    background: #0082df;
+        background-size: cover;
+    background-image: url(../images/nav-bg.png);
+    background-position: center center;
+    
+}
+.main-head .head-logo{
+	    width: 250px;
+    height: 100%;
+    line-height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #3f4457;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    float: left;
+    text-align: center;
+    background: rgba(63,67,87,0.5);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#66636787,endColorstr=#66636787);
+}
+
+.main-head .user-ico{
+	width:100px;
+    background: #3f4457;
+    display: inline-flex;
+    height: 100%;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    float: right;
+    line-height: 30px\9;
+     background: rgba(63,67,87,0.5);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#66636787,endColorstr=#66636787);
+
+}
+.main-head .user-ico .uimg{
+		display: block;
+		margin: 30px auto 0\9;
+
+}
+.main-head .nav-bar{
+	width: 100%;
+	width: 73%\9;
+    margin: 0;
+    padding: 0;
+    float: left;
+    display: inline-block;
+	height: 100%;
+	line-height: 80px;
+    
+}
+.main-head #webmenu,.main-head .first-menu li{
+	height: 100%;
+	
+}
+.main-head .first-menu li a{
+	height: 100%;    display: flex;
+    align-items: center;
+    line-height: 80px;
+}
+.main-head .second-menu {
+    top: 80px;
+    right: 0;
+    width: 106px;  line-height:30px;
+}
+.main-head #webmenu a{
+	font-weight: normal;
+	font-size: 16px;
+}
+.main-head .user-info{
+	position: absolute;
+    box-shadow: 0 0 6px 0 rgba(0,0,0,0.3);
+    width: 200px;
+    background: #fff;
+    height: 0;
+    right: 0;
+    top: 80px;
+    z-index: 99;
+    margin: 0;
+    padding: 0 20px;
+    transition: all .4s;
+        overflow: hidden;
+}
+.main-head .user-info img,.main-head .head-logo .logo-img{
+	vertical-align: middle;
+
+}
+.main-head .user-info li{
+	    height: 40px;
+    line-height: 40px;
+    color: #333;
+    list-style: none;
+    padding:5px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.main-head .user-info li:hover{
+	background: #eee;
+}
+.main-head .user-ico:hover .user-info{
+	height: 160px;
+}
+.main-head .user-ico .ico{
+
+}
+.main-head .user-ico .arrow{
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid #fff;
+    padding: 0;
+    right: 35px;
+    position: absolute;
+    bottom: -2px;
+    display: none;
+}
+.main-head .user-ico:hover .arrow{
+	display: block;
+}
+.page {
+	    background: #fff;
+}
+.page .datagrid{
+	padding: 20px;
+	padding-top:10px;
+/* 	padding-left:142px; */
+}
+.page .page-title{text-align: left;height:30px;margin:0;padding:0;width:100%;  
+  background-color: #cfe1ff;
+    border: 0;
+    text-indent: 2em;
+    line-height: 30px;
+    color:#333;
+    width: 100%;
+}
+.table1 th{
+	 color:#333;
+}
+
+
+.addBtnP{
+	border:1px solid #03C4B2;
+	color:#03C4B2;
+	padding:6px 10px;
+	border-radius:2px;
+}
+
+
+
+
+/*.panel-header, .panel-body {
+    border-color: #ccc;
+}
+.panel-header{
+	   
+    background: transparent;
+    height: 35px;
+}
+.panel-title {
+    font-size: 14px;
+    font-weight: normal;
+    color: #333;
+    height: 35px;
+    line-height: 35px;
+}
+.datagrid-toolbar, .datagrid-pager {
+    background: transparent;
+    padding: 10px;
+}
+.datagrid .datagrid-btn-separator{
+border: 0;
+}
+.datagrid-toolbar .l-btn{
+	border: 1px solid #ccc;
+    border-radius: 2px;
+    height: 30px;
+    min-width: 80px;
+    margin-right: 10px;
+        padding: 0;
+        line-height: 30px
+}
+.datagrid-toolbar .l-btn-text{
+line-height: inherit;
+}
+.datagrid-toolbar .l-btn-plain:hover {
+    background: #0082df;
+    color: #fff;
+    border: 1px solid #0082df;
+    }
+.datagrid-header-inner{
+    height: 36px;
+    background: #eee;
+    line-height: 35px;
+}*/
+
+/*boytoo added style in 20180329*/
+.wu-header{background: url(../images/head_bg.jpg) bottom right #02124e no-repeat;}
+.bg-green, .bg-red{border:none;background:rgba(255,255,255,0.7)!important;color:#02124e!important;}
+.bg-green:hover, .bg-red:hover{background:rgba(255,255,255,1)!important;}
+.accordion .accordion-header-selected{background:#02124e;color:#fff;}
+.wu-side-tree .tree-node-selected{background:#02124e;border:none;padding:6px 0;margin:3px 0;border-radius:5px;}
+.wu-side-tree .tree-node-selected .tree-title a{color:#fff;}
+.datagrid-view{background:#fff;}
+.wu-footer{background:#484a4f;color:#fff;border:none;}
+.icon-tip {background: url(../images/home.png) no-repeat center center;}
+.tabs-title{font-size: 14px;line-height: 30px;margin-left: 3px;}
+.icon-chart-organisation {background: url(../images/file-ico.png) no-repeat center center;}
+.tabs-icon{height:18px;}
+.icon-mini-refresh {background: url(../images/refresh.png) no-repeat center center;width:15px!important;height:15px!important;}
+.tabs li a.tabs-close {background: url(../images/close.png) no-repeat center center;width:15px;height:15px;}
+.tabs-title{padding-right:28px!important;}
+.tabs-p-tool{overflow:visible;right:20px}
+.wu-side-tree .tree-node-selected .tree-title a {padding-left:5px!important}
+.wu-side-tree .tree-node .tree-title a {padding-left:3px}
+.panel-header.accordion-header{height:22px;}
+.accordion-header .panel-title.panel-with-icon{height:22px;line-height:22px;font-size:14px;padding-left:20px;color:#02124e}
+.accordion-header.accordion-header-selected  .panel-title.panel-with-icon{color:#fff!important;}
+.icon-application-cascade {background: url(../images/packer.png) no-repeat center center;}
+input[value='查询']{background:#02124e;height:30px;border:solid 1px #02124e;padding:0;transition:all 0.3s;}
+.tabs li a.tabs-inner{color:#6d6d6d;}
+.tabs-selected .tabs-title{color:#02124e!important;}
+a:hover, a:active{color:#02124e;}
+.layout-split-south {border-top: 3px solid #64666c;}
+.window .window-header .panel-title{padding:5px;color:#02124e;font-size:14px;}
+.validatebox-invalid{border:solid 1px #ddd;background:#fff;height:25px;border-radius:3px;padding-left:3px;}
+.dialog-button .l-btn-small .l-btn-left{width:60px;height:32px;background:#02124e;color:#fff;border:none;}
+.dialog-button .l-btn-small .l-btn-icon{display:none;}
+.dialog-button .l-btn-small .l-btn-left .l-btn-text{margin:0;line-height:32px;}
+.wu-header-right .head-l{margin-top:20px!important;}
+.button:hover{background:#fff!important;filter:progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ffffff,endcolorstr=#ffffff,gradientType=0)!important;
+color:#02124e!important;}

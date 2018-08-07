@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sczh.function.test.mapper.TestMapper">
+	<select id="getSubjectList"  parameterType="java.util.Map" resultType="com.sczh.function.test.model.Subject">
+		SELECT * from f_subject order by id 
+	</select>
+	<select id="getValueBuKey"  parameterType="java.lang.String" resultType="org.springframework.util.LinkedCaseInsensitiveMap">
+		SELECT value from f_anser where `key` = #{key,jdbcType=VARCHAR}
+	</select>
+	<insert id="add"  parameterType="java.util.Map">
+		insert into f_result (id,userid,`key`,value) values (
+		  #{id,jdbcType=VARCHAR},
+		  #{userid,jdbcType=VARCHAR},
+		  #{key,jdbcType=VARCHAR},
+		  #{value,jdbcType=VARCHAR})
+	</insert>
+</mapper>

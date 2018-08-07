@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sczh.weixin.core.base.mapper.WeixinAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.sczh.weixin.core.base.model.WeixinAccount" >
+    <constructor >
+      <idArg column="id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountname" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accounttoken" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountnumber" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accounttype" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountemail" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountdesc" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountaccesstoken" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountappid" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountappsecret" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="ADDTOEKNTIME" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="USERNAME" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="WEIXIN_ACCOUNTID" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="accountjsticket" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="addtickettime" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, accountname, accounttoken, accountnumber, accounttype, accountemail, accountdesc, 
+    accountaccesstoken, accountappid, accountappsecret, ADDTOEKNTIME, USERNAME, WEIXIN_ACCOUNTID, 
+    accountjsticket, addtickettime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from weixin_account
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="findAllwaccounts" parameterType="java.util.Map" resultType="com.sczh.weixin.core.base.model.WeixinAccount" >
+		select 
+    <include refid="Base_Column_List" />
+    from weixin_account
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from weixin_account
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.sczh.weixin.core.base.model.WeixinAccount" >
+    insert into weixin_account (id, accountname, accounttoken, 
+      accountnumber, accounttype, accountemail, 
+      accountdesc, accountaccesstoken, accountappid, 
+      accountappsecret, ADDTOEKNTIME, USERNAME, 
+      WEIXIN_ACCOUNTID, accountjsticket, addtickettime
+      )
+    values (#{id,jdbcType=VARCHAR}, #{accountname,jdbcType=VARCHAR}, #{accounttoken,jdbcType=VARCHAR}, 
+      #{accountnumber,jdbcType=VARCHAR}, #{accounttype,jdbcType=VARCHAR}, #{accountemail,jdbcType=VARCHAR}, 
+      #{accountdesc,jdbcType=VARCHAR}, #{accountaccesstoken,jdbcType=VARCHAR}, #{accountappid,jdbcType=VARCHAR}, 
+      #{accountappsecret,jdbcType=VARCHAR}, #{addtoekntime,jdbcType=TIMESTAMP}, #{username,jdbcType=VARCHAR}, 
+      #{weixinAccountid,jdbcType=VARCHAR}, #{accountjsticket,jdbcType=VARCHAR}, #{addtickettime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sczh.weixin.core.base.model.WeixinAccount" >
+    insert into weixin_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accountname != null" >
+        accountname,
+      </if>
+      <if test="accounttoken != null" >
+        accounttoken,
+      </if>
+      <if test="accountnumber != null" >
+        accountnumber,
+      </if>
+      <if test="accounttype != null" >
+        accounttype,
+      </if>
+      <if test="accountemail != null" >
+        accountemail,
+      </if>
+      <if test="accountdesc != null" >
+        accountdesc,
+      </if>
+      <if test="accountaccesstoken != null" >
+        accountaccesstoken,
+      </if>
+      <if test="accountappid != null" >
+        accountappid,
+      </if>
+      <if test="accountappsecret != null" >
+        accountappsecret,
+      </if>
+      <if test="addtoekntime != null" >
+        ADDTOEKNTIME,
+      </if>
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="weixinAccountid != null" >
+        WEIXIN_ACCOUNTID,
+      </if>
+      <if test="accountjsticket != null" >
+        accountjsticket,
+      </if>
+      <if test="addtickettime != null" >
+        addtickettime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="accountname != null" >
+        #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttoken != null" >
+        #{accounttoken,jdbcType=VARCHAR},
+      </if>
+      <if test="accountnumber != null" >
+        #{accountnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="accountemail != null" >
+        #{accountemail,jdbcType=VARCHAR},
+      </if>
+      <if test="accountdesc != null" >
+        #{accountdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="accountaccesstoken != null" >
+        #{accountaccesstoken,jdbcType=VARCHAR},
+      </if>
+      <if test="accountappid != null" >
+        #{accountappid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountappsecret != null" >
+        #{accountappsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="addtoekntime != null" >
+        #{addtoekntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinAccountid != null" >
+        #{weixinAccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountjsticket != null" >
+        #{accountjsticket,jdbcType=VARCHAR},
+      </if>
+      <if test="addtickettime != null" >
+        #{addtickettime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sczh.weixin.core.base.model.WeixinAccount" >
+    update weixin_account
+    <set >
+      <if test="accountname != null" >
+        accountname = #{accountname,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttoken != null" >
+        accounttoken = #{accounttoken,jdbcType=VARCHAR},
+      </if>
+      <if test="accountnumber != null" >
+        accountnumber = #{accountnumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accounttype != null" >
+        accounttype = #{accounttype,jdbcType=VARCHAR},
+      </if>
+      <if test="accountemail != null" >
+        accountemail = #{accountemail,jdbcType=VARCHAR},
+      </if>
+      <if test="accountdesc != null" >
+        accountdesc = #{accountdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="accountaccesstoken != null" >
+        accountaccesstoken = #{accountaccesstoken,jdbcType=VARCHAR},
+      </if>
+      <if test="accountappid != null" >
+        accountappid = #{accountappid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountappsecret != null" >
+        accountappsecret = #{accountappsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="addtoekntime != null" >
+        ADDTOEKNTIME = #{addtoekntime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinAccountid != null" >
+        WEIXIN_ACCOUNTID = #{weixinAccountid,jdbcType=VARCHAR},
+      </if>
+      <if test="accountjsticket != null" >
+        accountjsticket = #{accountjsticket,jdbcType=VARCHAR},
+      </if>
+      <if test="addtickettime != null" >
+        addtickettime = #{addtickettime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sczh.weixin.core.base.model.WeixinAccount" >
+    update weixin_account
+    set accountname = #{accountname,jdbcType=VARCHAR},
+      accounttoken = #{accounttoken,jdbcType=VARCHAR},
+      accountnumber = #{accountnumber,jdbcType=VARCHAR},
+      accounttype = #{accounttype,jdbcType=VARCHAR},
+      accountemail = #{accountemail,jdbcType=VARCHAR},
+      accountdesc = #{accountdesc,jdbcType=VARCHAR},
+      accountaccesstoken = #{accountaccesstoken,jdbcType=VARCHAR},
+      accountappid = #{accountappid,jdbcType=VARCHAR},
+      accountappsecret = #{accountappsecret,jdbcType=VARCHAR},
+      ADDTOEKNTIME = #{addtoekntime,jdbcType=TIMESTAMP},
+      USERNAME = #{username,jdbcType=VARCHAR},
+      WEIXIN_ACCOUNTID = #{weixinAccountid,jdbcType=VARCHAR},
+      accountjsticket = #{accountjsticket,jdbcType=VARCHAR},
+      addtickettime = #{addtickettime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
